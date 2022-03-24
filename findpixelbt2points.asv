@@ -1,0 +1,25 @@
+function [x,y] = findpixelbtpoints(points)
+
+p = round(points);
+diffXY = abs(p(2:end,:)-p(1:end-1,:))+1;
+nPixel = max(diffXY,[],2);
+x = [];
+y = [];
+for i = 1:size(diffXY,2)
+    x = [x round(linspace(p(i,1),p(i+1,1),nPixel))];
+    y = [y round(linspace(p(i,2),p(i+1,2),nPixel))];
+end
+pointSet = unique([x' y'],'rows');
+
+
+
+function [x,y]=findpixelbt2points(p1,p2)
+% Find the pixel between two points. 
+
+p1=round(p1); % [x,y]
+p2=round(p2);
+nX = abs(p1(1)-p2(1))+1;
+nY = abs(p1(2)-p2(2))+1;
+nPixel = max(nX, nY);
+x = round(linspace(p1(1),p2(1),nPixel));
+y = round(linspace(p1(2),p2(2),nPixel));
