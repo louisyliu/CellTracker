@@ -1,4 +1,4 @@
-function trajImg = trajmovie(traj, img, varargin)
+function trajImg = trajmovie(traj, trajImg, varargin)
 %TRAJMOVIE creates trajectory movie.
 % trajImg = TRAJMOVIE(traj, img, trajNo) create the movie of trajectory of
 % index TrajNo. Plot all the trajectories by default.
@@ -20,7 +20,7 @@ frameDuration = cell2mat(cellfun(@(x) [x(1) x(end)], trajFrame, 'UniformOutput',
 time = min(frameDuration(:,1)):max(frameDuration(:,2));
 
 % reshape(trajImg, [size(img,1:2) 1 size(img)])]
-trajImg = im2uint8((permute(repmat(img(:,:,time), [1 1 1 3]),[1 2 4 3])));
+trajImg = im2uint8((permute(repmat(trajImg(:,:,time), [1 1 1 3]),[1 2 4 3])));
 nTraj = length(trajNo);
 color = im2uint8(linspecer(nTraj));
 color = color(randperm(nTraj),:); % shuffle the color
@@ -48,11 +48,11 @@ color = color(randperm(nTraj),:); % shuffle the color
 for iTraj = 1:nTraj
     coord = cat(1, trajTemp{iTraj}.Centroid);
     frame = trajFrame{iTraj};
-    pixelFilledCell = findpixelbtpoints(coord);
+    pixelFilledCell = findpixelbtpoints(coord)';
     for t = 2:length(frame)
-        pixelFilled = pixelFilledCell{t-1};
+        pixelFilled = cell2mat(pixelFilledCell(1:t-1));
         for iPixel = 1:size(pixelFilled,1)
-            trajImg(pixelFilled(iPixel,2),pixelFilled(iPixel,1),:,t) = color(iTraj,:);
+            trajImg(pixelFilled(iPixel,2),pixelFilled(iPixel,1),:,frame(t)) = color(iTraj,:);
             %             if examineMode
             %                 position = coord(t,:);
             %                 boxColor = color(iTraj,:);

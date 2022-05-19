@@ -1,5 +1,4 @@
-%% Loading imgbw
-load("imgbw.mat");
+function traj = tracking(imgbw)
 
 %% Feature Extraction
 distCritical = 30; % px
@@ -79,7 +78,7 @@ for i = 1:length(matchedTraj)-1
     [LiEnd,LocStart] = ismember(start,connect);
     trajMat(:,i+2) = 0;
     trajMat(LiEnd, i+2) = M2(LocStart(LiEnd), 2);
-    [LiEnd,LocStart] = ismember(connect,start);
+    [LiEnd,~] = ismember(connect,start);
     trajMat(end+1:end+sum(~LiEnd), i+1:end) = M2(~LiEnd,:);
 end
 
@@ -125,8 +124,8 @@ for i = 1:length(trajOnBorder)
         traj = [traj trajfilt];
     end
 end
+end
 
-disptitle('Finished!');
 %%
 function penalty = getpenalty(ccProps1, ccProps2, field, pweight)
 % only perform 1D array feature.
