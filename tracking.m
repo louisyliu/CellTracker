@@ -1,16 +1,36 @@
-function traj = tracking(imgbw)
+function traj = tracking(imgbw, varargin)
+%   TRACKING(imgbw, maxDistAllowed, features, featureWeight) finds the
+%   trajectories of binarized particle in [imgbw].  The maximum allowed
+%   displacement is specified in [maxDistAllowed] (unit: px; 20 px by
+%   default).  Some features can be taken into account in {features} of
+%   cell format and the weights are listed in [featureWeight].  
+%
+%   Available features include 'Area', 'MajorAxisLength'.  
+
+maxDistAllowed = 100; % px
+features = {};
+featureWeight = [];
+if nargin >= 2
+    maxDistAllowed = varargin{1}; % px
+end
+if nargin >= 4
+    features = varargin{2};
+    featureWeight = varargin{3};
+end
 
 %% Feature Extraction
-distCritical = 30; % px
+% maxDistAllowed = 100; % px
+
+
 
 disptitle('Extracting Features...');
 
 % ccInfo = {'Area', 'Centroid', 'MajorAxisLength', 'MeanIntensity', 'PixelIdxList'};
 ccInfo = {'Area', 'Centroid', 'MajorAxisLength',  'PixelIdxList'}; % feature in bw
 % features = {'MajorAxisLength', 'MeanIntensity'};
-features = {'MajorAxisLength'};
+% features = {'MajorAxisLength'};
 nPenalty = length(features);
-featureWeight = [1,1];
+% featureWeight = [3];
 time = size(imgbw, 3);
 ccFeatures = cell(time, 1);
 nCC = zeros(time, 1, 'uint32');
@@ -48,7 +68,7 @@ for t = 1:time-1
     for iCell = 1:nCC(t)
         dist(iCell, :) = vecnorm(coord1(iCell,:)-coord2, 2, 2)';
     end
-    mask = dist>distCritical;
+    mask = dist>maxDistAllowed;
     dist(mask) = inf;
 
     % penalty matrix
