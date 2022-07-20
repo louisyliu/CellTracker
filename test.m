@@ -1,13 +1,13 @@
 % filename = 'E:\exp_script\GitProject\sample\ofandsinglecelltracking_highdensity\20Xsinglecelltracking30ms20fps10s.nd2';
-filename = 'E:\exp_script\GitProject\sample\ofandsinglecelltracking_highdensity\sample2.tif';
-ima = nd2read(filename,1:10);
+filename = 'G:\exp_script\GitProject\sample\ofandsinglecelltracking_highdensity\20Xsinglecelltracking30ms20fps10s.nd2';
+ima = nd2read(filename,1:10); % can't read tif for updated nd2sdkmatlab.
 % ima = img(500:1500, 500:1500,:);
 % imshow(im,[])
 %%
 for i = 1:10
     im = ima(:,:,i);
 close
-[finalImg, filter] = bandpassfilt(im,0,6);
+[finalImg, ~] = bandpassfilt(im,0,6);
 imshow(finalImg)
 %%
 close
