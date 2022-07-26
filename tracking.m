@@ -2,8 +2,8 @@ function traj = tracking(imgbw, varargin)
 %   TRACKING(imgbw, maxDistAllowed, features, featureWeight) finds the
 %   trajectories of binarized particle in [imgbw].  The maximum allowed
 %   displacement is specified in [maxDistAllowed] (unit: px; 20 px by
-%   default).  Some features can be taken into account in {features} of
-%   cell format and the weights are listed in [featureWeight].  
+%   default).  Some features can be taken into account in {features}
+%   weighting in the list of [featureWeight].   
 %
 %   Available features include 'Area', 'MajorAxisLength'.  
 
