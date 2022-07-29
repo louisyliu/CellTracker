@@ -10,6 +10,7 @@ img = nd2read(filename,1:10); % can't read tif for updated nd2sdkmatlab.
 % bwgui1(img);
 
 % or export the binarization parameters using 'Generate Para' and commented code below
+% for batch processing
 bw = bwfun(@(x) getbw(x, bwPara), img);
 
 %% Track particles
