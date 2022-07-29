@@ -10,8 +10,11 @@ if nargin > 2
 end
 
 trajFrame = cellfun(@(x) [x.Frame], traj, 'UniformOutput',0)';
-frameDuration = cell2mat(cellfun(@(x) [x(1); x(end)], trajFrame, 'UniformOutput',0));
-time = min(frameDuration(1,:)):max(frameDuration(2,:));
+if isrow(trajFrame)
+    trajFrame = trajFrame';
+end
+frameDuration = cell2mat(cellfun(@(x) [x(1) x(end)], trajFrame, 'UniformOutput',0));
+time = min(frameDuration(:,1)):max(frameDuration(:,2));
 
 trajImg = im2uint8((permute(repmat(trajImg(:,:,time), [1 1 1 3]),[1 2 4 3])));
 nTraj = length(trajNo);
