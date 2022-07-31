@@ -1,4 +1,10 @@
 function trajMat = linktraj(matchedTraj)
+%LINKTRAJ links traj segments at each time. 
+%   trajMat = LINKTRAJ(matchedTraj) links traj segments at each time to a
+%   complet traj.  
+% 
+%   [trajMat] is of size N x T, where N is the traj number and T is the
+%   total time.   
 
 trajMat = matchedTraj{1};
 for i = 1:length(matchedTraj)-1

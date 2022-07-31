@@ -1,4 +1,7 @@
 function trajNotOnBorder = filtertrajonborder(trajAll)
+%FILTERTRAJONBORDER separates the traj on border. 
+%   filtertrajonborder(trajAll) separates the traj on border into several
+%   segments. 
 
 trajNotOnBorder = [];
 for i = 1:length(trajAll)

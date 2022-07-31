@@ -1,34 +1,29 @@
-function trajAll = buildtraj(trajMat, ccFeatures)
-%BUILDTRAJ builds traj with complete info. 
-%   trajAll = buildtraj(trajMat, ccFeatures) builds traj with complete info
-%   in {ccFeatures} containing located frame, centroid, major axis length, area, onborder or
-%   not, and mean intensity. 
-%
-%   {trajAll} is of size 
+function trajGapClosed = buildgapclosedtraj(trajLinkedMat, ccFeatures)
 
-
-nTraj = size(trajMat,1);
-trajAll = cell(nTraj,1); % traj including those on border
+nTrajLinked = size(trajLinkedMat,1);
+trajGapClosed = cell(nTrajLinked,1);
 
 % TraceStruct = struct('Frame',[],'Centroid', [], 'MeanIntensity', [], 'MajorAxisLength', []);
 TraceStruct = struct('Frame',[],'Centroid', [], 'MajorAxisLength', []);
-for iTraj = 1:nTraj
+for iTraj = 1:nTrajLinked
     Trace = TraceStruct;
-    trajMat1 = trajMat(iTraj,:);
+    trajMat1 = trajLinkedMat(iTraj,:);
     trajIdx = find(trajMat1);
     traceLength = numel(trajIdx);
     Trace(traceLength) = TraceStruct; % initialization
     for t = 1:traceLength
         frameNo = trajIdx(t);
         tracefeature = ccFeatures{frameNo};
+        
+
         spotFeature = tracefeature(trajMat1(frameNo));
         Trace(t).Area = spotFeature.Area; % spot feature
         Trace(t).Centroid = spotFeature.Centroid;
-        Trace(t).OnBorder = spotFeature.OnBorder;
-        %         Trace(t).MeanIntensity = spotFeature.MeanIntensity;
+%         Trace(t).MeanIntensity = spotFeature.MeanIntensity;
         Trace(t).MajorAxisLength = spotFeature.MajorAxisLength;
         Trace(t).Frame = frameNo;
     end
-    trajAll{iTraj} = Trace;
+    trajGapClosed{iTraj} = Trace;
 end
+
 end
