@@ -7,7 +7,7 @@ maxDistAllowed = 20; % px
 [ccFeatures] = extractfeat(imgbw);
 matchedTraj = matchtraj(ccFeatures);
 trajOnBorderMat = linktraj(matchedTraj);
-trajMat = linkborder(trajMat, ccFeatures);
+trajMat = linkborder(trajOnBorderMat, ccFeatures);
 traj = buildtraj(trajMat, ccFeatures);
 % traj = filtertrajonborder(trajAll);
 
