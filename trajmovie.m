@@ -1,7 +1,7 @@
 function trajImg = trajmovie(traj, trajImg, varargin)
 %TRAJMOVIE creates trajectory movie.
 % trajImg = TRAJMOVIE(traj, img, isExamineMode) create the movie of
-% all trajectory. 
+% all trajectory.
 
 trajNo = 1:length(traj);
 examineMode = false;
@@ -20,7 +20,8 @@ trajImg = im2uint8((permute(repmat(trajImg(:,:,time), [1 1 1 3]),[1 2 4 3])));
 nTraj = length(trajNo);
 color = im2uint8(linspecer(nTraj));
 color = color(randperm(nTraj),:); % shuffle the color
-trajLength = round(length(time)/5); % default traj length is 20% of length of movie. 
+% comet trace
+trajLength = round(length(time)/5); % default traj length is 20% of length of movie.
 
 for iTraj = 1:nTraj
     coord = cat(1, traj{iTraj}.Centroid);
@@ -37,7 +38,6 @@ for iTraj = 1:nTraj
     end
     dispbar(iTraj, nTraj);
 end
-
 
 if examineMode
     for t = 1:length(time)
@@ -59,4 +59,32 @@ if examineMode
         trajImg(:,:,:,t) = insertText(trajImg(:,:,:,t),position,textStr,'BoxColor',boxColor,TextColor='white', FontSize=24);
         dispbar(t, length(time));
     end
+end
+end
+
+function pointSet = findpixelbtpoints(points)
+%FINDPIXELBTPOINTS finds the pixel between points.
+%   [pointSet] is cell array of size N-1 x 1, where N is the number of
+%   points.
+%   [points] is matrix of size N x 2, like [x1 y1;x2 y2;...;xn yn];
+%
+%   Credit to: Ye Li
+
+p = round(points);
+if size(p,1) == 1
+    pointSet = {p};
+    return
+end
+diffXY = abs(p(2:end,:)-p(1:end-1,:))+1;
+nPixel = max(diffXY,[],2);
+nPoints = size(diffXY,1);
+pointSet = cell(1,nPoints);
+
+if nPoints >1
+    for i = 1:nPoints
+        x = [round(linspace(p(i,1),p(i+1,1),nPixel(i)))];
+        y = [round(linspace(p(i,2),p(i+1,2),nPixel(i)))];
+        pointSet{i} = [x' y'];
+    end
+end
 end
