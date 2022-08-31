@@ -1,4 +1,4 @@
-% Cell Tracker
+%% Cell Tracker
 
 %% Load image
 filename = 'G:\exp_script\GitProject\sample\ofandsinglecelltracking_highdensity\20Xsinglecelltracking30ms20fps10s.nd2';
@@ -20,8 +20,3 @@ trajFiltered = trajfilter(traj, 50);
 %% Visualize trajectories
 movie = trajmovie(trajFiltered, bw);
 implay(movie);
-%% Gap closing
-matchedGap = matchgap(traj);
-linkedGapMat = combinegap(matchedGap);
-trajLinkedMat = linkgap(trajMat, linkedGapMat);
-trajGapClosed = buildtraj(trajLinkedMat, ccFeatures);
