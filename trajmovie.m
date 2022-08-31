@@ -21,14 +21,14 @@ nTraj = length(trajNo);
 color = im2uint8(linspecer(nTraj));
 color = color(randperm(nTraj),:); % shuffle the color
 % comet trace
-trajLength = round(length(time)/5); % default traj length is 20% of length of movie.
+cometLength = ceil(length(time)/5); % default traj length is 20% of length of movie.
 
 for iTraj = 1:nTraj
     coord = cat(1, traj{iTraj}.Centroid);
     frame = trajFrame{iTraj};
     pixelFilledCell = findpixelbtpoints(coord)';
     tRange = 2:length(frame);
-    tStart = tRange - trajLength;
+    tStart = tRange - cometLength;
     tStart(tStart < 1) = 1;
     for t = tRange
         pixelFilled = cell2mat(pixelFilledCell(tStart(t-1):t-1));
@@ -80,7 +80,7 @@ nPixel = max(diffXY,[],2);
 nPoints = size(diffXY,1);
 pointSet = cell(1,nPoints);
 
-if nPoints >1
+if nPoints > 0
     for i = 1:nPoints
         x = [round(linspace(p(i,1),p(i+1,1),nPixel(i)))];
         y = [round(linspace(p(i,2),p(i+1,2),nPixel(i)))];
