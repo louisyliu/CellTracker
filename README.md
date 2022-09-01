@@ -76,9 +76,9 @@ implay(movie);
 
 | Function | Description | Usage |
 | ----------- | ----------- | ----|
-| `bwgui` | Image Binarizer.  The image is filtered by bandpass filter, Gaussian filter and thresholded with adaptive binarization. | `bwgui(img)`|
+| `bwgui` | Image Binarizer.  The image is filtered by bandpass filter, Gaussian filter and thresholded with adaptive binarization, followed by the removal of small objects (noise).  | `bwgui(img)`|
 
-![Binarizer GUI](img\bwgui.png)
+![Binarizer GUI](figure\bwgui.png)
 
 > __Note__
 >
@@ -122,7 +122,7 @@ The tracking algorithm is inspired by [TrackMate](https://imagej.net/plugins/tra
 
 For instance, a movie includes two cells with different length.
 
-![Movie of two cells](img\weight_length_sample.png)
+![Movie of two cells](figure\weight_length_sample.png)
 
 The program links the cells with the cloest distance if no weight is applied.
 
@@ -130,7 +130,7 @@ The program links the cells with the cloest distance if no weight is applied.
     traj = trackbw(bw, 1000);
 ```
 
-![Movie of two cells](img\no_weight.png)
+![Movie of two cells](figure\no_weight.png)
 
 The program links the cells based on their distance and long axis length (or area) if a suitable weight is applied.
 
@@ -138,7 +138,7 @@ The program links the cells based on their distance and long axis length (or are
     traj = trackbw(bw, 1000, {'MajorAxisLength'}, 2);
 ```
 
-![Movie of two cells](img\weight2.png)
+![Movie of two cells](figure\weight2.png)
 
 ### Trace Filter
 
