@@ -1,0 +1,8 @@
+*.asv
+*.m~
+*.mex*
+*.mlappinstall
+*.mltbx
+*.pptx
+*test*
+img.mat
