@@ -41,7 +41,7 @@ trajMatNotOnBorder = cell2mat(trajNotOnBorder);
 
 
     function xfinal = padzeros(x, frameStart, trajSeg)
-        xfinal = zeros(1, 100, 'uint16');
+        xfinal = zeros(1, nTime, 'uint16');
         segStart = frameStart + x(1) - 1;
         segEnd = frameStart + x(end) - 1;
         if length(x) ~= numel(segStart:segEnd)

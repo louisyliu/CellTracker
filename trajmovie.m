@@ -16,6 +16,7 @@ end
 frameDuration = cell2mat(cellfun(@(x) [x(1) x(end)], trajFrame, 'UniformOutput',0));
 time = min(frameDuration(:,1)):max(frameDuration(:,2));
 
+disptitle('Transforming images');
 trajImg = im2uint8((permute(repmat(trajImg(:,:,time), [1 1 1 3]),[1 2 4 3])));
 nTraj = length(trajNo);
 color = im2uint8(linspecer(nTraj));
