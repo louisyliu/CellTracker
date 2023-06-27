@@ -15,10 +15,10 @@ function matchedTraj = matchtraj(ccFeatures, features, featureWeight, maxDistAll
 %
 %   Available choices of {features} are 'Area' and 'MajorAxisLength'.
 
-if nargin <= 4
+if nargin < 4
     maxDistAllowed = 20; % px
 end
-if nargin == 2
+if nargin == 1
     features = {};
     featureWeight = [];
 end

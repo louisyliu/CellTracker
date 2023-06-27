@@ -1,4 +1,4 @@
-function matchedGap = matchgap(traj, features, featureWeight, maxGapAllowed, maxTimeDiff)
+function matchedGap = matchgap(traj, features, featureWeight, maxGapAllowed, maxTimeGap)
 %MATCHGAP matches the traj gap. 
 %   MATCHGAP fiters the traj gap of distance larger than [maxGapAllowed],
 %   of time interval larger than [maxTimeDiff].   
@@ -13,7 +13,7 @@ function matchedGap = matchgap(traj, features, featureWeight, maxGapAllowed, max
 
 
 if nargin < 5
-    maxTimeDiff = 2; % frame
+    maxTimeGap = 2; % frame
 end
 if nargin < 4
     maxGapAllowed = 10; % px
@@ -39,7 +39,7 @@ for iTraj = 1:nTraj
     distGap(iTraj, :) = vecnorm(coordEnd(iTraj,:)-coordStart, 2, 2)';
     frameGap(:, iTraj) = frameStart(iTraj)-frameEnd;
 end
-mask = distGap>maxGapAllowed | frameGap>maxTimeDiff | frameGap<=0;
+mask = distGap>maxGapAllowed | frameGap>maxTimeGap | frameGap<=0;
 distGap(mask) = inf;
 
 % penalty matrix

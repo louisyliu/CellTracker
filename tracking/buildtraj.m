@@ -22,12 +22,18 @@ for iTraj = 1:nTraj
         frameNo = trajIdx(t);
         tracefeature = ccFeatures{frameNo};
         spotFeature = tracefeature(trajMat1(frameNo));
-        Trace(t).Area = spotFeature.Area; % spot feature
-        Trace(t).Centroid = spotFeature.Centroid;
-        Trace(t).OnBorder = spotFeature.OnBorder;
-        %         Trace(t).MeanIntensity = spotFeature.MeanIntensity;
-        Trace(t).MajorAxisLength = spotFeature.MajorAxisLength;
-        Trace(t).Frame = frameNo;
+        % added on 20221121
+        fields = fieldnames(spotFeature);
+        for iField = 1:length(fields)
+            fieldName = fields{iField};
+            Trace(t).(fieldName) = spotFeature.(fieldName);
+            Trace(t).Area = spotFeature.Area; % spot feature
+            Trace(t).Centroid = spotFeature.Centroid;
+            Trace(t).OnBorder = spotFeature.OnBorder;
+            %         Trace(t).MeanIntensity = spotFeature.MeanIntensity;
+            Trace(t).MajorAxisLength = spotFeature.MajorAxisLength;
+            Trace(t).Frame = frameNo;
+        end
     end
     trajAll{iTraj} = Trace;
 end
