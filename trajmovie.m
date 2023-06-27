@@ -57,7 +57,7 @@ if examineMode
             boxColor(iTraj,:) = color(trajOrder(iTraj),:);
             textStr{iTraj} = num2str(trajTNo(iTraj));
         end
-        trajImg(:,:,:,t) = insertText(trajImg(:,:,:,t),position,textStr,'BoxColor',boxColor,TextColor='white', FontSize=24);
+        trajImg(:,:,:,t) = insertText(trajImg(:,:,:,t),position,textStr,'BoxColor',boxColor,'TextColor','white', 'FontSize', 24);
         dispbar(t, length(time));
     end
 end
