@@ -38,6 +38,11 @@ for t = 1:time-1
     % distance matrix
     coord1 = cat(1, ccFeature1.Centroid);
     coord2 = cat(1, ccFeature2.Centroid);
+
+    if isempty(coord2)
+        error(['Error: No traj is detected at T =' num2str(t+1) '.']);
+    end
+
     nCC1 = size(coord1, 1);
     nCC2 = size(coord2, 1);
     dist = zeros(nCC1, nCC2); % dist matrix : row t col t+1
