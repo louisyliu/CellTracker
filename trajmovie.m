@@ -14,7 +14,9 @@ if isrow(trajFrame)
     trajFrame = trajFrame';
 end
 frameDuration = cell2mat(cellfun(@(x) [x(1) x(end)], trajFrame, 'UniformOutput',0));
-time = min(frameDuration(:,1)):max(frameDuration(:,2));
+timeMin = min(frameDuration(:,1));
+timeMax = max(frameDuration(:,2));
+time = timeMin:timeMax;
 
 disptitle('Transforming images');
 trajImg = im2uint8((permute(repmat(trajImg(:,:,time), [1 1 1 3]),[1 2 4 3])));
@@ -22,11 +24,12 @@ nTraj = length(trajNo);
 color = im2uint8(linspecer(nTraj));
 color = color(randperm(nTraj),:); % shuffle the color
 % comet trace
-cometLength = ceil(length(time)/5); % default traj length is 20% of length of movie.
+% cometLength = ceil(length(time)/5); % default traj length is 20% of length of movie.
+cometLength = ceil(length(time)/2);
 
 for iTraj = 1:nTraj
     coord = cat(1, traj{iTraj}.Centroid);
-    frame = trajFrame{iTraj};
+    frame = trajFrame{iTraj}-timeMin+1;
     pixelFilledCell = findpixelbtpoints(coord)';
     tRange = 2:length(frame);
     tStart = tRange - cometLength;
