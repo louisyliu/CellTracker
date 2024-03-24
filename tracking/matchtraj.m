@@ -3,10 +3,13 @@ function matchedTraj = matchtraj(ccFeatures, features, featureWeight, maxDistAll
 %   MATCHTRAJ creates cost matrix depending on dist and features to obtain
 %   the minimized total cost by solving linear assignment problem.
 %
-%   [matchedTraj] is cell array of size T-1, with each cell storing the
-%   info of t = ti indexed particle in Col 1 linked to t = ti+1 indexed
-%   particle in Col 2.  The index at time t matches the corresponding
-%   particle in ccFeatures at time t.
+%   [matchedTraj] is a cell array of size T-1, where T is the total number
+%   of time steps. 
+%   Each cell in [matchedTraj] stores the info of particle at time t, 
+%   indexed in Column 1, linked to the corresponding particle at time t+1,
+%   indexed in Column 2. The index of a particle at time t in [matchedTraj]
+%   matches index of the corresponding particle in the [ccFeatures] array
+%   at the same time step. 
 %
 %   E.g., matchedTraj = [1 2; 2 3] means 
 %               t = ti    |    t = ti+1
@@ -31,13 +34,21 @@ matchedTraj = cell(time-1, 1);
 % unmatchedR = matchedTraj;
 % unmatchedC = matchedTraj;
 
-for t = 1:time-1
-
+t = 0;
+while t <= time-1
+    t = t + 1;
     ccFeature1 = ccFeatures{t};
     ccFeature2 = ccFeatures{t+1};
     % distance matrix
     coord1 = cat(1, ccFeature1.Centroid);
     coord2 = cat(1, ccFeature2.Centroid);
+
+    if isempty(coord2)
+        % disp(['Error: No traj is detected at T =' num2str(t+1) '.']);
+        t = t + 1;
+        continue;
+    end
+
     nCC1 = size(coord1, 1);
     nCC2 = size(coord2, 1);
     dist = zeros(nCC1, nCC2); % dist matrix : row t col t+1
@@ -57,6 +68,4 @@ for t = 1:time-1
     cost = (dist.*P).^2; % cost matrix
     costUnmatchd = max(cost(cost~=inf))*1.05;
     matchedTraj{t} = matchpairs(cost, costUnmatchd);
-
-    dispbar(t, time-1);
 end
