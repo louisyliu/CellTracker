@@ -35,7 +35,7 @@ matchedTraj = cell(time-1, 1);
 % unmatchedC = matchedTraj;
 
 t = 0;
-while t <= time-1
+while t < time-1
     t = t + 1;
     ccFeature1 = ccFeatures{t};
     ccFeature2 = ccFeatures{t+1};
@@ -55,8 +55,14 @@ while t <= time-1
     for iCell = 1:nCC1
         dist(iCell, :) = vecnorm(coord1(iCell,:)-coord2, 2, 2)';
     end
+   
     mask = dist > maxDistAllowed;
     dist(mask) = inf;
+    
+    % newly added
+    if ~any(dist(~mask))
+        dist(~mask) = 1;
+    end
 
     % penalty matrix
     penalty = zeros([size(dist) nFeatures]);
