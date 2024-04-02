@@ -1,16 +1,33 @@
 function trajMat = linktraj(matchedTraj)
-%LINKTRAJ links traj segments at each time. 
-%   trajMat = LINKTRAJ(matchedTraj) links traj segments at each time to a
-%   complet traj.  
-% 
-%   [trajMat] is of size N x T, where N is the traj number and T is the
-%   total time.   
-
-trajMat = matchedTraj{1};
+% LINKTRAJ Links trajectory segments at each time step to form complete
+% trajectories. LINKTRAJ takes the matched trajectory segments at each time step
+% and links them together to form complete trajectories. It constructs a matrix
+% representation of the linked trajectories, where each row represents a unique
+% trajectory and each column represents a time step.
+%
+%   - trajMat: An N x T matrix representing the linked trajectories, where N is the
+%              total number of unique trajectories and T is the total number of time
+%              steps. Each row of 'trajMat' represents a complete trajectory, with the
+%              elements indicating the index of the trajectory segment at each time step.
+%              Zero values indicate the absence of a trajectory segment at a particular
+%              time step.
 
 nTraj = length(matchedTraj)-1;
+trajMat = [];
+for i = 1:nTraj
+    if ~isempty(matchedTraj{i})
+        trajMat = matchedTraj{i};
+        break
+    end
+end
+
+if isempty(trajMat)
+    return
+end
+
 for i = 1:length(matchedTraj)-1
-    start = trajMat(:,i+1);  
+
+    start = trajMat(:,i+1);
     M2 = matchedTraj{i+1};
     if isempty(M2)
         trajMat(:,i+2) = 0;

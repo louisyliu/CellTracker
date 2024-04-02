@@ -6,6 +6,10 @@ function trajAll = buildtraj(trajMat, ccFeatures)
 %
 %   {trajAll} is of size 
 
+if isempty(trajMat)
+    trajAll = [];
+    return
+end
 
 nTraj = size(trajMat,1);
 trajAll = cell(nTraj,1); % traj including those on border

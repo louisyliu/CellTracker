@@ -1,5 +1,10 @@
 function trajLinkedMat = linkgap(trajMat, linkedGapMat)
 
+if isempty(linkedGapMat)
+    trajLinkedMat = trajMat;
+    return
+end
+
 trajLinkedMat = trajMat;
 nGapLinked = size(linkedGapMat,1);
 firstTraj = linkedGapMat(:,1);

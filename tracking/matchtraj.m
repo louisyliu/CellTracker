@@ -1,22 +1,38 @@
 function matchedTraj = matchtraj(ccFeatures, features, featureWeight, maxDistAllowed)
-%MATCHTRAJ matches traj in consecutive frame.
-%   MATCHTRAJ creates cost matrix depending on dist and features to obtain
-%   the minimized total cost by solving linear assignment problem.
+%MATCHTRAJ Matches trajectories in consecutive frames.
+%   MATCHTRAJ creates cost matrix depending on distance and features to obtain
+%   the minimized total cost by solving the linear assignment problem.  It
+%   matches trajectories in consecutive frames based on the provided 
+%   features and distance criteria.
 %
-%   [matchedTraj] is a cell array of size T-1, where T is the total number
-%   of time steps. 
-%   Each cell in [matchedTraj] stores the info of particle at time t, 
-%   indexed in Column 1, linked to the corresponding particle at time t+1,
-%   indexed in Column 2. The index of a particle at time t in [matchedTraj]
-%   matches index of the corresponding particle in the [ccFeatures] array
-%   at the same time step. 
+%   Inputs:
+%   - ccFeatures: A cell array of size T, where T is the total number of time
+%                 steps. Each cell contains a structure with connected component
+%                 features for a specific time step.
+%   - features: A cell array of strings specifying the features to be considered
+%               for trajectory matching. Available choices are 'Area' and
+%               'MajorAxisLength'. Default is an empty cell array.
+%   - featureWeight: A vector of weights corresponding to each feature in the
+%                    'features' array. Default is an empty vector.
+%   - maxDistAllowed: Maximum allowed distance (in pixels) between trajectories
+%                     in consecutive frames for matching. Default is 20 pixels.
 %
-%   E.g., matchedTraj = [1 2; 2 3] means 
-%               t = ti    |    t = ti+1
-%         #         1    -->     2      
-%         #         2    -->     3 
+%   Output:
+%   - matchedTraj: A cell array of size T-1, where each cell stores the info of
+%                  particles at time t, indexed in Column 1, linked to the
+%                  corresponding particles at time t+1, indexed in Column 2.
+%                  The index of a particle at time t in 'matchedTraj' matches the
+%                  index of the corresponding particle in the 'ccFeatures' array
+%                  at the same time step.
 %
-%   Available choices of {features} are 'Area' and 'MajorAxisLength'.
+%   The 'matchedTraj' output can be interpreted as follows:
+%       matchedTraj = [1 2; 2 3] means
+%       t = ti | t = ti+1
+%       # 1 --> 2
+%       # 2 --> 3
+%
+%   Note: If no trajectories are detected at a specific time step, an warning message 
+%         will be displayed, and the function will continue to the next time step.
 
 if nargin < 4
     maxDistAllowed = 20; % px
@@ -42,9 +58,14 @@ while t < time-1
     % distance matrix
     coord1 = cat(1, ccFeature1.Centroid);
     coord2 = cat(1, ccFeature2.Centroid);
+    
+    if isempty(coord1)
+        warning(['No object is found at T = ' num2str(t) '.']);
+        continue;
+    end
 
     if isempty(coord2)
-        % disp(['Error: No traj is detected at T =' num2str(t+1) '.']);
+        warning(['No object is found at T = ' num2str(t+1) '.']);
         t = t + 1;
         continue;
     end
@@ -62,6 +83,10 @@ while t < time-1
     % newly added
     if ~any(dist(~mask))
         dist(~mask) = 1;
+    end
+
+    if all(dist(~mask) == inf)
+        continue 
     end
 
     % penalty matrix

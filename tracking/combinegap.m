@@ -1,11 +1,17 @@
 function linkedGapMat = combinegap(matchedGap)
-%COMBINEGAP links the possible consecutive gap for the same traj. 
-%   combinegap(matchedGap) integrates the gap info and links the gap that
-%   conainis the same traj. 
+% COMBINEGAP Links the possible consecutive gaps for the same trajectory.
+%   COMBINEGAP integrates the gap information and links the gaps that belong
+%   to the same trajectory. It takes the matched gap information and constructs
+%   a matrix that represents the linked gaps.
 %
-%   For example, [matchedGap] shows [10, 20; 20, 30] suggesting 
-%        traj#10 -> #20, and traj#20 -> #30. 
-%   [linkedGapMat] outputs [10, 20 ,30]. traj#10 -> #20 -> #30. 
+%   For example, [matchedGap] shows [10, 20; 20, 30] suggesting
+%        traj#10 -> #20, and traj#20 -> #30.
+%   [linkedGapMat] outputs [10, 20 ,30]. traj#10 -> #20 -> #30.
+
+if isempty(matchedGap)
+    linkedGapMat = [];
+    return
+end
 
 nGap = size(matchedGap,1);
 linkedGapMat = matchedGap;
