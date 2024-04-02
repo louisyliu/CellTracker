@@ -34,7 +34,7 @@ CellTracker is a user-friendly MATLAB tool for tracking particles in image seque
 
 ## Usage
 
-1. Load the image sequence into MATLAB (e.g., using __[Nd2Matlab](https://github.com/tytghy/Nd2SdkMatlab/)__ or `imread`)..
+1. Load the image sequence into MATLAB (e.g., using __[Nd2Matlab](https://github.com/tytghy/Nd2SdkMatlab/)__ or `imread`).
 2. Binarize the image.
 3. Track the binarized particles using the `trackbw` function.
 4. (Optional) Filter the trajectories using `trajfilter`.
@@ -89,8 +89,10 @@ The tracking algorithm is inspired by [TrackMate](https://imagej.net/plugins/tra
 
 > __Note__
 >
-> - The weight of a feature is defined as three times the relative difference:
-> $$ 3×weight×{|p1−p2|\over p1+p2} $$
+> The weight of a feature is defined as three times the relative difference:
+>
+>  $$ 3×weight×{|p1−p2|\over p1+p2} $$
+>
 > where $p1$ and $p2$ are the feature values (e.g., cell lengths).
 
 Consider a movie containing two cells of different lengths:
