@@ -14,7 +14,7 @@ bwgui(img);
 % bw = bwfun(@(x) getbw(x, bwPara), img);
 
 %% Track particles 
-% load \sample\bw.mat
+% load sample\bw.mat
 [traj] = trackbw(bw);
 trajFiltered = trajfilter(traj, 50);
 
