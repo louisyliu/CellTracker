@@ -1,4 +1,4 @@
-function [traj] = trackbw(imgbw, maxDistAllowed, features, featureWeight, performGapClosing, maxGapAllowed, maxTimeGap)
+function [traj] = trackbw(imgbw, maxDistAllowed, maxAreaChangedAllowed, features, featureWeight, performGapClosing, maxGapAllowed, maxTimeGap)
 % TRACKBW Tracks the trajectories of binarized particles in an image sequence.
 %   TRACKBW finds the trajectories of binarized particles in the input image
 %   sequence [imgbw]. It performs feature extraction, trajectory matching, linking,
@@ -8,11 +8,15 @@ function [traj] = trackbw(imgbw, maxDistAllowed, features, featureWeight, perfor
 %   - imgbw: A binary image sequence representing the particles to be tracked.
 %   - maxDistAllowed: Maximum allowed displacement (in pixels) between consecutive
 %                     frames for trajectory matching. Default is 20 pixels.
+%   - maxAreaChangedAllowed: Maximum allowed relative area change between consecutive
+%                     frames for trajectory matching. Set to a positive value to
+%                     enable area change filtering. Default is -1, which
+%                     disables this feature.  
 %   - features: A cell array of strings specifying the features to be considered
 %               for trajectory matching and gap closing. Available features include
-%               'Area' and 'MajorAxisLength'. Default is an empty cell array.
+%               'Area' and 'MajorAxisLength'. Default is an empty cell array {}.
 %   - featureWeight: A vector of weights corresponding to each feature in the
-%                    'features' array. Default is an empty vector.
+%                    'features' array. Default is an empty vector [].
 %   - performGapClosing: A logical flag indicating whether to perform gap closing
 %                        after trajectory linking. Default is false.
 %   - maxGapAllowed: Maximum allowed distance (in pixels) for gap closing. Default
@@ -26,18 +30,21 @@ function [traj] = trackbw(imgbw, maxDistAllowed, features, featureWeight, perfor
 %           and 'Frame' (corresponding frame number).
 
 
-if nargin < 7
+if nargin < 8
     maxTimeGap = 2; % frame
 end
-if nargin < 6
+if nargin < 7
     maxGapAllowed = 10; % px
 end
-if nargin < 5
+if nargin < 6
     performGapClosing = false;
 end
-if nargin < 3
+if nargin < 4
     features = {};
     featureWeight = [];
+end
+if nargin < 3
+    maxAreaChangedAllowed = -1;
 end
 if nargin == 1
     maxDistAllowed = 20; % px
@@ -50,7 +57,7 @@ end
 disptitle('Extracting features');
 [ccFeatures] = extractfeat(imgbw);
 disptitle('Matching trajectories');
-matchedTraj = matchtraj(ccFeatures, features, featureWeight, maxDistAllowed);
+matchedTraj = matchtraj(ccFeatures, features, featureWeight, maxDistAllowed, maxAreaChangedAllowed);
 disptitle('Linking trajectories');
 trajOnBorderMat = linktraj(matchedTraj);
 disptitle('Filtering traj on border');

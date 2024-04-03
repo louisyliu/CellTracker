@@ -1,4 +1,4 @@
-function matchedTraj = matchtraj(ccFeatures, features, featureWeight, maxDistAllowed)
+function matchedTraj = matchtraj(ccFeatures, features, featureWeight, maxDistAllowed, areaChangedThreshold)
 %MATCHTRAJ Matches trajectories in consecutive frames.
 %   MATCHTRAJ creates cost matrix depending on distance and features to obtain
 %   the minimized total cost by solving the linear assignment problem.  It
@@ -73,13 +73,28 @@ while t < time-1
     nCC1 = size(coord1, 1);
     nCC2 = size(coord2, 1);
     dist = zeros(nCC1, nCC2); % dist matrix : row t col t+1
+    
+    mask = false(size(dist));
+
+    if areaChangedThreshold ~= -1
+        areaChanged = dist;
+        % area matrix
+        area1 = cat(1, ccFeature1.Area);
+        area2 = cat(1, ccFeature2.Area);
+        for iCell = 1:nCC1
+            areaChanged(iCell, :) = abs((area1(iCell,:)-area2)./area1(iCell,:)');
+        end
+        mask = areaChanged > areaChangedThreshold;
+    end
+
     for iCell = 1:nCC1
         dist(iCell, :) = vecnorm(coord1(iCell,:)-coord2, 2, 2)';
     end
    
-    mask = dist > maxDistAllowed;
+    mask = mask | dist > maxDistAllowed;
     dist(mask) = inf;
     
+
     % newly added
     if ~any(dist(~mask))
         dist(~mask) = 1;
