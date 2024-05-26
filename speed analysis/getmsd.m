@@ -1,4 +1,4 @@
-function [meanMSD, nMSD] = getmsd(traj)
+function [meanMSD] = getmsd(traj)
 % meanMSD = [mean]; no need std.  nMSD = how many traj to calcualte
 % msd for each traj rather than each segment. 
 % hypothesis: cells have intrinsic motility difference. 
